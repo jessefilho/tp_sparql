@@ -1,0 +1,155 @@
+1)
+Quel est le namespace utilisé pour les instances / ressources crées dans ce fichier? 
+A: RDF, rdf, rdfs, xsd, xmlns:, xmlns et base.
+
+Par quel mécanisme l'association entre instances et namespace est-elle faite?
+A: Par les ENTITY. 
+
+----
+
+2) Quel est le namespace du schéma RDF utilisé et comment est-il associé aux balises?
+c est rdf et cela c est associé xmlns:rdf ="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+
+---
+
+3) Trouvez toutes les informations sur John.
+- John has a father called Harry.
+- John has a sister called Sophie.
+- John has a shoe size of 14.
+- John has 37 years old.
+- John has a son called Mark.
+- John has a woman friend called Alice.
+- John is married with Jennifer.
+- John, that has as mother Sophie, has a shirt size 12 and a trousers size 44.
+
+----
+
+Question 1
+L'interface contient une requête par défaut. Exécutez cette requête. Combien de réponses obtenezvous?
+A: 97
+Que représente ce nombre de réponses ?
+A: Des ressources et triplets
+
+SELECT (COUNT(?s) AS ?triples) WHERE { ?s ?p ?o }
+---
+
+Question 2
+Combien de réponses obtenez-vous?
+A: 33
+
+humans.rdfs#Person
+
+---
+Question 3
+A: 6 result de epouse
+
+---
+Question 4
+
+PREFIX humans: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+select *
+where {?x humans:shoesize ?y }
+
+1. 
+PREFIX humans: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+select ?name ?pointure
+where {
+?x humans:name ?name .
+?x humans:shoesize ?pointure
+}
+
+2.
+PREFIX humans: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+	
+select ?name ?pointure
+where {
+?x humans:name ?name .
+?x humans:shoesize ?pointure
+FILTER (xsd:integer(?pointure) > 7)
+}
+
+3.
+PREFIX humans: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+	
+select ?name ?pointure
+where {
+?x humans:name ?name .
+?x humans:shoesize ?pointure .
+?x humans:shirtsize ?shirt .
+
+FILTER (xsd:integer(?pointure) > 7 && xsd:integer(?shirt) > 12 )
+}
+
+Question 5
+
+1.
+PREFIX humans: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+	
+select ?name ?pointure ?shirtsize ?age ?shoesize ?trouserssize
+where {
+?x humans:name ?name .
+?x humans:shirtsize ?shirtsize .
+?x humans:age ?age .
+?x humans:shoesize ?shoesize .
+?x humans:trouserssize ?trouserssize .
+
+FILTER (xsd:string(?name) = "John" )
+}
+
+select * where {<http://www.inria.fr/2007/09/11/humans.rdfs-instances#John> ?x ?y}
+
+2.
+DESCRIBE <http://www.inria.fr/2007/09/11/humans.rdfs-instances#John>
+
+QUESTION 6
+
+1.
+PREFIX humans: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+	
+select ?name 
+where {
+?x humans:name ?name .
+?x humans:hasChild ?haschild .
+
+}
+
+
+2.
+PREFIX humans: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+
+select DISTINCT ?name
+where {
+?x humans:name ?name .
+?x humans:hasChild ?haschild 
+
+}
+
+Question 7
+PREFIX humans: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+CONSTRUCT { ?x humans:hasFriend ?hasFriend  }
+WHERE  { ?hasFriend humans:hasFriend ?x}
+
+Question 8
+PREFIX humans: <http://www.inria.fr/2007/09/11/humans.rdfs#>
+
+SELECT ?x
+WHERE  { 
+?x rdf:type humans:Person . MINUS { ?x rdf:type humans:Lecturer}
+
+}
+ Cela, il fait la difference entre tous les Person quil y a pas la propriete Lecturer.
+
+
+
+
+
+
+
+
+
